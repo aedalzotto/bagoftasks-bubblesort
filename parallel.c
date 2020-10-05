@@ -14,8 +14,8 @@
 	#define M 40
 #else
 	/* Matrix with 1.000 arrays of 100.000 entries */
-	#define N 1000
-	#define M 100000
+	#define N 8		// Change to 1000
+	#define M 10000	// Change to 100000
 #endif
 
 /* Communication tags. SVC for service and ARRAY for 'payload' */
