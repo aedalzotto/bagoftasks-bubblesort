@@ -54,9 +54,7 @@ int main(int argc, char *argv[])
 		/* Try to allocate memory for all our values */
 		int *values = (int*)malloc(M*N*sizeof(int));
 		if(values == NULL){
-			#if DEBUG == 1
-				printf("M: Not enough memory to allocate global vector\n");
-			#endif
+			printf("M: Not enough memory to allocate global vector\n");
 			MPI_Finalize();
 			exit(1);
 		}
@@ -153,6 +151,9 @@ int main(int argc, char *argv[])
 			printf("\n");
 		#endif
 
+		free(values);
+		values = NULL;
+
 	} else {
 		/* All others are SLAVES */
 		#if DEBUG == 1
@@ -162,9 +163,7 @@ int main(int argc, char *argv[])
 		/* Try to allocate memory for one array */
 		int *values = (int*)malloc(M*sizeof(int));
 		if(values == NULL){
-			#if DEBUG == 1
-				printf("S%d: Not enough memory to allocate local vector\n", rank);
-			#endif
+			printf("S%d: Not enough memory to allocate local vector\n", rank);
 			MPI_Finalize();
 			exit(1);
 		}
@@ -223,6 +222,9 @@ int main(int argc, char *argv[])
 					break;
 			}
 		}
+
+		free(values);
+		values = NULL;
 
 	}
 
