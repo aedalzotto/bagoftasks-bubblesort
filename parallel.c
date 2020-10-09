@@ -39,6 +39,12 @@ int main(int argc, char *argv[])
 	int size;
 	MPI_Comm_size(MPI_COMM_WORLD, &size);
 
+	if(size == 1){
+		printf("M: No slaves available. Exiting.\n");
+		MPI_Finalize();
+		exit(1);
+	}
+
 	if(rank == size - 1){
 		/* Last processor is MASTER */
 		#if DEBUG == 1
