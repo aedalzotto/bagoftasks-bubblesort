@@ -1,3 +1,7 @@
+/**
+ * @file bubblesort.c
+ */
+
 #include <mpi.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -48,7 +52,7 @@ int main(int argc, char *argv[])
 	const int ARRAY_CNT = size*2;
 	const int ARRAY_SZ = 40;
 #else
-	/* PRODUCTION Matrix default with 1.000 arrays of 100.000 entries each */
+	/* PRODUCTION Matrix default with 1.000 arrays of 50.000 entries each */
 	/* To change, configure by compiler's command line N and M defines */
 	#ifndef N
 		const int ARRAY_CNT = 1000;
@@ -56,7 +60,7 @@ int main(int argc, char *argv[])
 		const int ARRAY_CNT = N;
 	#endif
 	#ifndef M
-		const int ARRAY_SZ = 100000;
+		const int ARRAY_SZ = 50000;
 	#else
 		const int ARRAY_SZ = M;
 	#endif
@@ -139,11 +143,11 @@ int parallel(const int SIZE, const int RANK, const int ARRAY_CNT, const int ARRA
 
 int parallel_master(const int SLAVE_CNT, const int ARRAY_CNT, const int ARRAY_SZ)
 {
-	printf("Running in parallel mode with %d slaves\n\n", SLAVE_CNT);
+	printf("M: Running in parallel mode with %d slaves\n\n", SLAVE_CNT);
 
-	#if DEBUG == 1
+#if DEBUG == 1
 	printf("M: Allocating global matrix\n");
-	#endif
+#endif
 
 	/* Try to allocate memory for all values */
 	int *values = (int*)malloc(ARRAY_CNT*ARRAY_SZ*sizeof(int));
@@ -214,7 +218,7 @@ int parallel_master(const int SLAVE_CNT, const int ARRAY_CNT, const int ARRAY_SZ
 	return 0;
 }
 
-void master_send_array(int *array, const int SIZE, const int INDEX, const int DST)
+void master_send_array(int *array, const int SIZE, int INDEX, const int DST)
 {
 	/* Send message indicating that the slave must receive the 'INDEX' array */
 	MPI_Send(&INDEX, 1, MPI_INT, DST, TAG_SVC, MPI_COMM_WORLD);
@@ -229,7 +233,7 @@ void master_send_array(int *array, const int SIZE, const int INDEX, const int DS
 
 void master_send_terminate(const int DST)
 {
-	const int SVC = SVC_TERMINATE;
+	int SVC = SVC_TERMINATE;
 	MPI_Send(&SVC, 1, MPI_INT, DST, TAG_SVC, MPI_COMM_WORLD);
 
 #if DEBUG == 1
@@ -291,7 +295,7 @@ int parallel_slave(const int RANK, const int ARRAY_SZ, const int MASTER)
 	return 0;
 }
 
-void slave_work(int *array, const int ARRAY_SZ, const int IDX, const int RANK, const int MASTER)
+void slave_work(int *array, const int ARRAY_SZ, int IDX, const int RANK, const int MASTER)
 {
 	/* Receive the array */
 	MPI_Status mpi_status;
