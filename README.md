@@ -3,20 +3,21 @@ Distributed bubble sort instances using MPI
 
 ## Building
 
-Compile with standard array count (1.000) and array size (100.000)
+Compile with standard array count (1.000) and array size (50.000). It is highly
+recommended to optimize the code with -O3:
 ```
-$ mpicc bubblesort.c -o bubblesort -std=c99
+$ mpicc bubblesort.c -o bubblesort -std=c99 -O3
 ```
 
 To choose different array count (N) and array size (M), define in compiler's command line
 ```
-$ mpicc bubblesort.c -o bubblesort -std=c99 -DN=100 -DM=10000
+$ mpicc bubblesort.c -o bubblesort -std=c99 -O3 -DN=100 -DM=10000
 ```
 
 To compile in DEBUG mode, also define in compiler's command line. This will always
 run with NP*2 arrays with size of 40.
 ```
-$ mpicc bubblesort.c -o bubblesort_debug -std=c99 -DDEBUG=1
+$ mpicc bubblesort.c -o bubblesort_debug -std=c99 -O3 -DDEBUG=1
 ```
 
 ## Running
